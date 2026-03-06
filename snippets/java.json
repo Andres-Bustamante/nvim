@@ -1,0 +1,55 @@
+{
+    "repositorio": {
+        "prefix": "repositorio",
+        "body": [
+            "package co.org.avance.factel.app.repository;",
+            "",
+            "import co.org.avance.factel.app.repository.global.BaseJpaRepository;",
+            "import org.springframework.stereotype.Repository;",
+            "import co.org.avance.factel.app.entity.${1:entidad};",
+            "import java.util.List;",
+            "",
+            "@Repository",
+            "public interface ${1:entidad}Repository extends BaseJpaRepository<${1:entidad}, ${2:Id}> {",
+            "}"
+        ]
+    },
+    "DAO": {
+        "prefix": "DAO",
+        "body": [
+            "package co.org.avance.factel.app.dao;",
+            "",
+            "import org.springframework.data.domain.Page;",
+            "import org.springframework.data.domain.Pageable;",
+            "",
+            "import co.org.avance.factel.app.entidades.${1:entidad};",
+            "",
+            "public interface ${1:entidad}Dao {",
+            "    public ${1:entidad} getById(String id);",
+            "",
+            "   public ${1:entidad} save(${1:entidad} ${2:entidad});",
+            "",
+            "    public void delete(String id);",
+            "",
+            "    public void delete(${1:entidad} ${2:entidad});",
+            "",
+            "    public Page<${1:entidad}> getAll(Pageable pageable);",
+            "}"
+        ]
+    },
+    "entidad": {
+        "prefix": "entidad",
+        "body": [
+            "package co.org.avance.factel.app.entity;",
+            "import jakarta.persistence.*;",
+            "import jakarta.validation.constraints.*;",
+            "import lombok.*;",
+            "",
+            "@Data",
+            "@Entity",
+            "@NoArgsConstructor",
+            "@RequiredArgsConstructor",
+            "@EqualsAndHashCode(onlyExplicitlyIncluded = true)"
+        ]
+    }
+}
