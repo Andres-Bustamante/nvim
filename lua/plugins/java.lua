@@ -21,21 +21,22 @@ return {
           nvim_version = true, -- Check Neovim version
           nvim_jdtls_conflict = true, -- Check for nvim-jdtls conflict
         },
+        settings = {
+          java = {
+            format = {
+              enabled = true,
+              settings = {
+                url = vim.fn.expand("~/.config/nvim/formaterJava/java_formater.xml"),
+                profile = "javaFormater",
+              },
+            },
+          },
+        },
         jdtls = {
           enable = true,
           auto_install = true,
           verison = "1.43.0",
-          settings = {
-            java = {
-              format = {
-                enabled = true,
-                settings = {
-                  url = "file:///home/desarrollo/.config/nvim/lua/config/formater/java.xml",
-                  profile = "javaFormater",
-                },
-              },
-            },
-          },
+
           -- -202412191447",
           -- version = "1.43.0-202412191447",
           -- javaagent = vim.fn.expand("~/.local/share/java/lombok.jar"),

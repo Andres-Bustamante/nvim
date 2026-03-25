@@ -32,12 +32,12 @@ return {
     opts = {
       inlay_hints = { enabled = false }, -- Disable inlay hints
       servers = {
-        -- angularls = {
-        --   -- Configuration for Angular Language Server
-        --   root_dir = function(fname)
-        --     return require("lspconfig.util").root_pattern("angular.json", "project.json")(fname)
-        --   end,
-        -- },
+        angularls = {
+          -- Configuration for Angular Language Server
+          root_dir = function(fname)
+            return require("lspconfig.util").root_pattern("angular.json", "project.json")(fname)
+          end,
+        },
         nil_ls = {
           -- Configuration for nil (Nix Language Server), already installed via nix
           cmd = { "nil" },
