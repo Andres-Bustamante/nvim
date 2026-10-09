@@ -209,6 +209,9 @@ return {
       },
       notifier = {},
       image = {},
+      lazygit = {
+        win = { border = "rounded" },
+      },
       picker = {
         exclude = {
           ".git",
@@ -260,5 +263,19 @@ AVANCE
         },
       },
     },
+  },
+
+  {
+    "folke/noice.nvim",
+    opts = function(_, opts)
+      opts.presets = opts.presets or {}
+      opts.presets.lsp_doc_border = true
+      opts.views = opts.views or {}
+      opts.views.hover = vim.tbl_deep_extend("force", opts.views.hover or {}, {
+        border = { style = "rounded" },
+        win_options = { winhighlight = { Normal = "NormalFloat", FloatBorder = "FloatBorder" } },
+      })
+      return opts
+    end,
   },
 }

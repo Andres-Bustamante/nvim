@@ -145,6 +145,189 @@ return {
     --     })
     --   end,
     -- },
+    {
+      "sainnhe/everforest",
+      lazy = false,
+      priority = 1000,
+      config = function()
+        -- Optionally configure and load the colorscheme
+        -- directly inside the plugin declaration.
+        -- Fondo y contraste
+        -- vim.g.everforest_background = 'soft'
+        -- vim.g.everforest_ui_contrast = 'high'
+        -- vim.g.everforest_float_style = 'dim'
+        vim.g.everforest_better_performance = 1
+
+        -- Borde redondeado por defecto para ventanas flotantes (Neovim 0.11+)
+        vim.o.winborder = 'rounded'
+
+        -- Borde redondeado para diagnósticos flotantes (hover/signature heredan de winborder)
+        vim.diagnostic.config({ float = { border = 'rounded' } })
+
+        -- Forzar borde en LSP hover (K) y signature help — Neovim 0.11+ API
+        local orig_hover = vim.lsp.buf.hover
+        vim.lsp.buf.hover = function(config)
+          config = config or {}
+          config.border = config.border or 'rounded'
+          return orig_hover(config)
+        end
+        local orig_sig = vim.lsp.buf.signature_help
+        vim.lsp.buf.signature_help = function(config)
+          config = config or {}
+          config.border = config.border or 'rounded'
+          return orig_sig(config)
+        end
+
+        -- Estilos de texto
+        vim.g.everforest_enable_italic = true
+        vim.g.everforest_italic_keyword = 1
+
+        -- Resaltado contextual
+        -- vim.g.everforest_current_word = 'bold'
+        vim.g.everforest_dim_inactive_windows = 1
+        vim.g.everforest_inlay_hints_background = 'dimmed'
+
+        -- UI extra
+        vim.g.everforest_sign_column_background = 'none'
+        vim.g.everforest_show_eob = 0
+
+        -- Diagnósticos: errores con fondo rojito
+        vim.g.everforest_diagnostic_text_highlight = 1
+        vim.g.everforest_diagnostic_line_highlight = 1
+        vim.g.everforest_diagnostic_virtual_text = 'highlighted'
+        vim.g.everforest_spell_foreground = 'none'
+
+        -- Override del color de spell + bordes transparentes
+        local apply_overrides = function()
+          vim.api.nvim_set_hl(0, 'SpellBad',   { fg = '#7a8478', undercurl = true, sp = '#7a8478' })
+          vim.api.nvim_set_hl(0, 'SpellCap',   { fg = '#7a8478', undercurl = true, sp = '#7a8478' })
+          vim.api.nvim_set_hl(0, 'SpellRare',  { fg = '#7a8478', undercurl = true, sp = '#7a8478' })
+          vim.api.nvim_set_hl(0, 'SpellLocal', { fg = '#7a8478', undercurl = true, sp = '#7a8478' })
+
+            -- Bordes y fondos transparentes para flotantes, popups y notificaciones
+            local transparent = { bg = 'NONE', ctermbg = 'NONE' }
+            local border = { fg = "#FFB0AF", bg = 'NONE', ctermbg = 'NONE', bold = true }
+
+            -- Ventanas flotantes nativas (LSP hover, signature help, diagnostics, etc.)
+            vim.api.nvim_set_hl(0, 'NormalFloat',     transparent)
+            vim.api.nvim_set_hl(0, 'FloatBorder',     border)
+            vim.api.nvim_set_hl(0, 'FloatTitle',      border)
+            vim.api.nvim_set_hl(0, 'FloatFooter',     border)
+
+            -- Menú de autocompletado
+            vim.api.nvim_set_hl(0, 'Pmenu',           transparent)
+            vim.api.nvim_set_hl(0, 'PmenuSbar',       transparent)
+            vim.api.nvim_set_hl(0, 'PmenuThumb',      { bg = '#7a8478' })
+
+            -- Mensajes / cmdline (noice, etc.)
+            vim.api.nvim_set_hl(0, 'NormalNC',        transparent)
+            vim.api.nvim_set_hl(0, 'MsgArea',         transparent)
+            vim.api.nvim_set_hl(0, 'MsgSeparator',    border)
+
+            -- nvim-notify
+            vim.api.nvim_set_hl(0, 'NotifyBackground',       transparent)
+            for _, level in ipairs({ 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE' }) do
+              vim.api.nvim_set_hl(0, 'Notify' .. level .. 'Border', { link = 'FloatBorder' })
+              vim.api.nvim_set_hl(0, 'Notify' .. level .. 'Body',   transparent)
+              vim.api.nvim_set_hl(0, 'Notify' .. level .. 'Title',  { link = 'FloatTitle' })
+            end
+
+            -- Telescope
+            vim.api.nvim_set_hl(0, 'TelescopeNormal',        transparent)
+            vim.api.nvim_set_hl(0, 'TelescopeBorder',        border)
+            vim.api.nvim_set_hl(0, 'TelescopePromptNormal',  transparent)
+            vim.api.nvim_set_hl(0, 'TelescopePromptBorder',  border)
+            vim.api.nvim_set_hl(0, 'TelescopePromptTitle',   border)
+            vim.api.nvim_set_hl(0, 'TelescopeResultsNormal', transparent)
+            vim.api.nvim_set_hl(0, 'TelescopeResultsBorder', border)
+            vim.api.nvim_set_hl(0, 'TelescopeResultsTitle',  border)
+            vim.api.nvim_set_hl(0, 'TelescopePreviewNormal', transparent)
+            vim.api.nvim_set_hl(0, 'TelescopePreviewBorder', border)
+            vim.api.nvim_set_hl(0, 'TelescopePreviewTitle',  border)
+
+            -- Lazy / Mason
+            vim.api.nvim_set_hl(0, 'LazyNormal',  transparent)
+            vim.api.nvim_set_hl(0, 'MasonNormal', transparent)
+
+            -- which-key
+            vim.api.nvim_set_hl(0, 'WhichKeyFloat',  transparent)
+            vim.api.nvim_set_hl(0, 'WhichKeyBorder', border)
+
+            -- Noice
+            vim.api.nvim_set_hl(0, 'NoiceCmdlinePopup',       transparent)
+            vim.api.nvim_set_hl(0, 'NoiceCmdlinePopupBorder', border)
+            vim.api.nvim_set_hl(0, 'NoicePopup',              transparent)
+            vim.api.nvim_set_hl(0, 'NoicePopupBorder',        border)
+            vim.api.nvim_set_hl(0, 'NoiceMini',               transparent)
+
+          -- Diagnósticos flotantes
+          vim.api.nvim_set_hl(0, 'DiagnosticFloatingError', { fg = '#d4565f', bg = 'NONE' })
+          vim.api.nvim_set_hl(0, 'DiagnosticFloatingWarn',  { fg = '#f0c674', bg = 'NONE' })
+          vim.api.nvim_set_hl(0, 'DiagnosticFloatingInfo',  { fg = '#6fa8d8', bg = 'NONE' })
+          vim.api.nvim_set_hl(0, 'DiagnosticFloatingHint',  { fg = '#7fc4b8', bg = 'NONE' })
+
+          -- snacks.nvim (picker, notifier, input, dashboard)
+          for _, g in ipairs({
+            'SnacksNormal', 'SnacksNormalNC', 'SnacksWinBar', 'SnacksWinBarNC',
+            'SnacksBackdrop',
+            'SnacksPicker', 'SnacksPickerInput', 'SnacksPickerList', 'SnacksPickerPreview',
+            'SnacksPickerBox', 'SnacksPickerTitle', 'SnacksPickerFooter',
+            'SnacksNotifier', 'SnacksNotifierTitle', 'SnacksNotifierIcon', 'SnacksNotifierFooter',
+            'SnacksNotifierInfo', 'SnacksNotifierWarn', 'SnacksNotifierError',
+            'SnacksNotifierDebug', 'SnacksNotifierTrace',
+            'SnacksInput', 'SnacksInputNormal', 'SnacksInputTitle',
+            'SnacksDashboardNormal',
+          }) do
+            vim.api.nvim_set_hl(0, g, { bg = 'NONE', ctermbg = 'NONE' })
+          end
+          for _, g in ipairs({
+            'SnacksPickerBorder', 'SnacksPickerInputBorder', 'SnacksPickerListBorder',
+            'SnacksPickerPreviewBorder', 'SnacksPickerBoxBorder',
+            'SnacksNotifierBorder',
+            'SnacksNotifierBorderInfo', 'SnacksNotifierBorderWarn',
+            'SnacksNotifierBorderError', 'SnacksNotifierBorderDebug',
+            'SnacksNotifierBorderTrace',
+            'SnacksInputBorder', 'SnacksWinBorder',
+          }) do
+            vim.api.nvim_set_hl(0, g, { fg = '#7a8478', bg = 'NONE', ctermbg = 'NONE' })
+          end
+
+          -- fzf-lua
+          for _, g in ipairs({
+            'FzfLuaNormal', 'FzfLuaPreviewNormal', 'FzfLuaTitle',
+            'FzfLuaHelpNormal', 'FzfLuaBackdrop',
+          }) do
+            vim.api.nvim_set_hl(0, g, { bg = 'NONE', ctermbg = 'NONE' })
+          end
+          for _, g in ipairs({
+            'FzfLuaBorder', 'FzfLuaPreviewBorder', 'FzfLuaHelpBorder', 'FzfLuaTitleFlags',
+          }) do
+            vim.api.nvim_set_hl(0, g, { fg = '#7a8478', bg = 'NONE', ctermbg = 'NONE' })
+          end
+        end
+
+        vim.api.nvim_create_autocmd('ColorScheme', {
+          pattern = '*',
+          callback = apply_overrides,
+        })
+        vim.api.nvim_create_autocmd({ 'VimEnter', 'User' }, {
+          pattern = '*',
+          callback = function() vim.schedule(apply_overrides) end,
+        })
+
+        -- Paleta "nórdico frío" — acentos desplazados hacia tonos azulados
+        vim.g.everforest_colors_override = {
+          red    = { '#d4565f', '167' },
+          orange = { '#e08a66', '208' },
+          yellow = { '#f0c674', '179' },
+          green  = { '#a8d080', '142' },
+          aqua   = { '#7fc4b8', '108' },
+          blue   = { '#6fa8d8', '109' },
+          purple = { '#c690b8', '175' },
+        }
+        -- vim.cmd.colorscheme("everforest")
+      end,
+    },
 
     {
       -- Plugin for the Oldworld color scheme
@@ -194,15 +377,16 @@ return {
       opts = {},
     },
 
-    {
-      "neanias/everforest",
-      lazy = false,
-      priority = 1000,
-      config = function()
-        vim.g.everforest_enable_italic = true
-        vim.g.everforest_background = "hard" -- Set the background to 'hard'
-      end,
-    },
+    -- {
+    --   "neanias/everforest",
+    --   lazy = false,
+    --   priority = 1000,
+    --   config = function()
+    --     -- vim.g.transparent_enabled = true,
+    --     vim.g.everforest_enable_italic = true
+    --     vim.g.everforest_background = "hard" -- Set the background to 'hard'
+    --   end,
+    -- },
 
     {
       "HoNamDuong/hybrid.nvim",
@@ -258,11 +442,24 @@ return {
     },
 
     {
+      -- Plugin for the Bamboo color scheme
+      "ribru17/bamboo.nvim",
+      lazy = false, -- Load this plugin immediately
+    },
+
+    {
+      "2nthony/vitesse.nvim",
+      dependencies = {
+        "tjdevries/colorbuddy.nvim",
+      },
+    },
+
+    {
       -- LazyVim configuration
       "LazyVim/LazyVim",
       opts = {
         -- Set the default color scheme
-        colorscheme = "neon-punkpeach-night",
+        colorscheme = "everforest",
       },
     },
   },

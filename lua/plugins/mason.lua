@@ -8,6 +8,9 @@ return {
       log_level = vim.log.levels.DEBUG,
       ui = {
         check_outdated_packages_on_open = false, -- Evita que Node salte antes de tiempo
+        border = "rounded",
+        width = 0.85,
+        height = 0.85,
         icons = {
           package_installed = "",
           package_pending = "➜",

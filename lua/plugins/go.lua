@@ -5,8 +5,9 @@ return {
   },
   ft = { "go", "gomod" },
   opts = {
+    lsp_codelens = false,
     lsp_inlay_hints = {
-      enable = false,
+      -- enable = false,
     },
   },
 

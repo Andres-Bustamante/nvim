@@ -27,6 +27,10 @@ return {
     -- Keybindings for nvim-dap
     keys = {
       { "<leader>d", "", desc = "+debug", mode = { "n", "v" } }, -- Group for debug commands
+      -- { "<M-j>", function() require("dap").step_over() end, desc = "DAP Step Over" },
+      -- { "<M-k>", function() require("dap").continue() end, desc = "DAP Continue" },
+      -- { "<M-h>", function() require("dap").step_into() end, desc = "DAP Step Into" },
+      -- { "<M-l>", function() require("dap").step_out() end, desc = "DAP Step Out" },
       {
         "<leader>dB",
         function()
@@ -203,6 +207,77 @@ return {
       -- Add the env property to each existing Go configuration
       for _, config in pairs(dap.configurations.go or {}) do
         config.env = load_env_variables
+      end
+
+      -- Java attach configs (WildFly + Spring standalone) para sigafc-deploy.sh
+      dap.configurations.java = dap.configurations.java or {}
+      table.insert(dap.configurations.java, {
+        type = "java",
+        request = "attach",
+        name = "Attach WildFly (sigafc :8787)",
+        hostName = "127.0.0.1",
+        port = 8787,
+        mainClass = "",
+        projectName = "",
+      })
+      table.insert(dap.configurations.java, {
+        type = "java",
+        request = "attach",
+        name = "Attach Spring (sigafc :5005)",
+        hostName = "127.0.0.1",
+        port = 5005,
+        mainClass = "",
+        projectName = "",
+      })
+
+      dap.adapters.firefox = {
+        type = "executable",
+        command = "node",
+        args = { vim.fn.stdpath("data") .. "/mason/packages/firefox-debug-adapter/dist/adapter.bundle.js" },
+      }
+      -- Configuración para debuggear Angular en Chrome
+      for _, lang in ipairs({ "typescript", "javascript" }) do
+        dap.configurations[lang] = dap.configurations[lang] or {}
+        table.insert(dap.configurations[lang], {
+          type = "pwa-chrome",
+          request = "launch",
+          name = "Angular: launch Chrome (:4200)",
+          url = "http://localhost:4200",
+          webRoot = "${workspaceFolder}",
+          sourceMaps = true,
+          userDataDir = false,
+        })
+        table.insert(dap.configurations[lang], {
+          type = "pwa-chrome",
+          request = "attach",
+          name = "Angular: attach Chrome (:9222)",
+          port = 9222,
+          webRoot = "${workspaceFolder}",
+          sourceMaps = true,
+        })
+
+        table.insert(dap.configurations[lang], {
+          name = "Angular: launch Firefox (:4200)",
+          type = "firefox",
+          request = "launch",
+          reAttach = true,
+          url = "http://localhost:4200",
+          webRoot = "${workspaceFolder}",
+          firefoxExecutable = "/home/desarrollo/Downloads/firefox-140.0b2/firefox/firefox",
+          pathMappings = {
+            { url = "http://localhost:4200", path = "${workspaceFolder}" },
+            { url = "webpack://", path = "${workspaceFolder}/" },
+          },
+        })
+
+        table.insert(dap.configurations[lang], {
+          name = "Angular: attach Firefox (:6000)",
+          type = "firefox",
+          request = "attach",
+          url = "http://localhost:4200",
+          webRoot = "${workspaceFolder}",
+          port = 6000,
+        })
       end
     end,
   },

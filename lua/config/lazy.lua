@@ -2,12 +2,6 @@
 
 -- Node.js configuration - always use latest stable version
 vim.g.node_host_prog = vim.fn.exepath("node") or "/usr/local/bin/node"
--- Ensure we're using a recent Node version for LSPs and plugins
-if vim.fn.executable("node") == 1 then
-  local node_version = vim.fn.system("node --version"):gsub("\n", "")
-  print("Using Node.js version: " .. node_version)
-end
-
 -- Spell-checking
 vim.opt.spell = true -- activa spell checker
 vim.opt.spelllang = { "en" }
@@ -98,6 +92,10 @@ require("lazy").setup({
   },
   install = { colorscheme = { "tokyonight", "habamax" } }, -- Specify colorschemes to install
   checker = { enabled = true }, -- Automatically check for plugin updates
+  ui = {
+    border = "rounded",
+    backdrop = 60,
+  },
   performance = {
     rtp = {
       -- Disable some runtime path plugins to improve performance
